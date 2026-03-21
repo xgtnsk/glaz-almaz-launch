@@ -1407,8 +1407,8 @@ textarea {
   }
 
   .section-head h2 {
-    font-size: clamp(22px, 8.8vw, 34px);
-    line-height: 0.94;
+    font-size: clamp(18px, 7.4vw, 28px);
+    line-height: 0.92;
   }
 
   .metrics,
@@ -1452,27 +1452,19 @@ textarea {
   .offers__grid,
   .locations-list {
     display: grid;
-    grid-auto-flow: column;
-    grid-auto-columns: minmax(260px, 82vw);
-    grid-template-columns: none;
-    overflow-x: auto;
+    grid-auto-flow: row;
+    grid-auto-columns: auto;
+    grid-template-columns: 1fr;
+    overflow: visible;
     gap: 12px;
-    padding-bottom: 8px;
-    scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-  }
-
-  .services__grid::-webkit-scrollbar,
-  .offers__grid::-webkit-scrollbar,
-  .locations-list::-webkit-scrollbar {
-    display: none;
+    padding-bottom: 0;
+    scroll-snap-type: none;
   }
 
   .service,
   .offer,
   .location {
-    scroll-snap-align: start;
+    scroll-snap-align: none;
   }
 
   .service,
@@ -1483,6 +1475,13 @@ textarea {
   .service h3,
   .offer h3 {
     font-size: 17px;
+  }
+
+  .offer h3,
+  .service h3,
+  .location h3,
+  .contact h2 {
+    overflow-wrap: anywhere;
   }
 
   .offer--image {
@@ -1542,6 +1541,10 @@ textarea {
     flex-direction: column;
   }
 
+  .location__actions a {
+    width: 100%;
+  }
+
   .metrics,
   .services,
   .offers,
@@ -1582,38 +1585,6 @@ textarea {
   }
 
   .mobile-dock {
-    position: fixed;
-    right: 12px;
-    bottom: 12px;
-    left: 12px;
-    z-index: 22;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-    padding: 8px;
-    border-radius: 20px;
-    background: rgba(255, 255, 255, 0.76);
-    border: 1px solid rgba(255, 255, 255, 0.88);
-    box-shadow: 0 20px 50px rgba(18, 42, 72, 0.18);
-    backdrop-filter: blur(20px);
-  }
-
-  .mobile-dock__button {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 40px;
-    border-radius: 14px;
-    background: rgba(47, 80, 128, 0.1);
-    font-family: "DrukTextWideTT", "Arial Black", sans-serif;
-    font-size: 10px;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--blue);
-  }
-
-  .mobile-dock__button--primary {
-    color: var(--white);
-    background: linear-gradient(135deg, var(--blue), var(--blue-mid));
+    display: none;
   }
 }
