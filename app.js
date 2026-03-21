@@ -5,6 +5,7 @@ const loaderValue = document.getElementById("loader-value");
 const topbar = document.getElementById("topbar");
 const progressBar = document.getElementById("scroll-progress");
 const canvas = document.getElementById("sequence-canvas");
+const sequenceVideo = document.getElementById("sequence-video");
 const context = canvas.getContext("2d");
 const storySection = document.getElementById("story");
 const cards = Array.from(document.querySelectorAll(".story-card"));
@@ -50,6 +51,16 @@ function setLoaderProgress() {
 }
 
 function preloadFrames() {
+  if (isMobileViewport()) {
+    loadedFrames = frameCount;
+    setLoaderProgress();
+    if (sequenceVideo) {
+      sequenceVideo.currentTime = 0;
+      sequenceVideo.play().catch(() => {});
+    }
+    return Promise.resolve();
+  }
+
   const jobs = [];
 
   for (let index = 0; index < frameCount; index += 1) {
@@ -164,6 +175,10 @@ function updateStoryInterface(progress, frameIndex) {
 }
 
 function requestDraw() {
+  if (isMobileViewport()) {
+    return;
+  }
+
   if (pendingDraw) {
     return;
   }
@@ -181,6 +196,10 @@ function requestDraw() {
 }
 
 function drawStoryAtProgress(progress) {
+  if (isMobileViewport()) {
+    return;
+  }
+
   const startFrame = getStartFrame();
   const frameIndex = Math.round(startFrame + progress * (frameCount - 1 - startFrame));
   drawFrame(frameIndex);
@@ -207,6 +226,10 @@ function animateStory() {
 }
 
 function syncStoryProgress(immediate = false) {
+  if (isMobileViewport()) {
+    return;
+  }
+
   targetStoryProgress = getStoryProgress();
 
   if (immediate) {
@@ -319,12 +342,16 @@ function initAmbientBackground() {
 
 function onScroll() {
   updateChrome();
-  syncStoryProgress();
+  if (!isMobileViewport()) {
+    syncStoryProgress();
+  }
 }
 
 function onResize() {
-  resizeCanvas();
-  syncStoryProgress(true);
+  if (!isMobileViewport()) {
+    resizeCanvas();
+    syncStoryProgress(true);
+  }
 }
 
 window.addEventListener("scroll", onScroll, { passive: true });
@@ -334,6 +361,12 @@ updateChrome();
 initMetrics();
 initAmbientBackground();
 preloadFrames().then(() => {
+  if (isMobileViewport()) {
+    updateStoryCards(0);
+    updateStoryInterface(0, getStartFrame());
+    return;
+  }
+
   currentStoryProgress = getStoryProgress();
   targetStoryProgress = currentStoryProgress;
   requestDraw();

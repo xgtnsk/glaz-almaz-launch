@@ -615,6 +615,15 @@ textarea {
   display: block;
 }
 
+.story__video {
+  display: none;
+  width: 100%;
+  min-height: min(66vh, 720px);
+  border-radius: 28px;
+  background: #fff;
+  object-fit: contain;
+}
+
 .story__hint {
   position: absolute;
   right: 26px;
@@ -1314,12 +1323,15 @@ textarea {
   }
 
   .story__scroll-area {
-    height: 136vh;
+    height: auto;
   }
 
   .story__sticky {
+    position: relative;
+    top: auto;
     align-items: start;
-    padding-top: 92px;
+    padding-top: 88px;
+    padding-bottom: 0;
     min-height: auto;
   }
 
@@ -1342,18 +1354,11 @@ textarea {
   }
 
   .story__frame-ui {
-    flex-direction: column;
-    align-items: flex-start;
-    margin: 14px 0 14px;
+    margin: 12px 0;
   }
 
   .story-overlay {
-    position: relative;
-    left: auto;
-    right: auto;
-    top: auto;
-    bottom: auto;
-    max-width: none;
+    display: none;
   }
 
   .story-pills {
@@ -1371,7 +1376,21 @@ textarea {
   }
 
   #sequence-canvas {
-    min-height: 38vh;
+    display: none;
+  }
+
+  .story__video {
+    display: block;
+    min-height: auto;
+    aspect-ratio: 1 / 1;
+    border-radius: 24px;
+    transform: translateZ(0);
+    will-change: transform;
+  }
+
+  .story-meter,
+  .story__hint {
+    display: none;
   }
 
   .story-card {
@@ -1409,7 +1428,7 @@ textarea {
   .story__cards {
     gap: 10px;
     min-height: 170px;
-    padding-bottom: 84px;
+    padding-bottom: 0;
   }
 
   .section-head {
