@@ -1310,7 +1310,7 @@ textarea {
   }
 
   .story__scroll-area {
-    height: 148vh;
+    height: 136vh;
   }
 
   .story__sticky {
@@ -1460,11 +1460,11 @@ textarea {
   .offers,
   .locations,
   .contact {
-    padding-bottom: 84px;
+    padding-bottom: 64px;
   }
 
   .locations {
-    padding-top: 72px;
+    padding-top: 56px;
   }
 
   .contact__panel {

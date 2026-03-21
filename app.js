@@ -19,9 +19,21 @@ const imageCache = [];
 let loadedFrames = 0;
 let activeFrame = -1;
 let pendingDraw = false;
+let storyAnimationFrame = 0;
+let targetStoryProgress = 0;
+let currentStoryProgress = 0;
+
+function isMobileViewport() {
+  return window.innerWidth < 820;
+}
+
+function getCanvasDpr() {
+  const deviceDpr = window.devicePixelRatio || 1;
+  return Math.min(deviceDpr, isMobileViewport() ? 1.35 : 2);
+}
 
 function getStartFrame() {
-  return window.innerWidth < 820 ? 8 : 0;
+  return isMobileViewport() ? 8 : 0;
 }
 
 function framePath(index) {
@@ -68,7 +80,7 @@ function preloadFrames() {
 }
 
 function resizeCanvas() {
-  const dpr = window.devicePixelRatio || 1;
+  const dpr = getCanvasDpr();
   const bounds = canvas.getBoundingClientRect();
   canvas.width = Math.round(bounds.width * dpr);
   canvas.height = Math.round(bounds.height * dpr);
@@ -82,13 +94,13 @@ function drawFrame(index) {
 
   activeFrame = index;
 
-  const dpr = window.devicePixelRatio || 1;
+  const dpr = getCanvasDpr();
   const { width, height } = canvas;
   const scaledWidth = width / dpr;
   const scaledHeight = height / dpr;
   const imageRatio = image.width / image.height;
   const canvasRatio = scaledWidth / scaledHeight;
-  const mobile = window.innerWidth < 820;
+  const mobile = isMobileViewport();
 
   context.setTransform(1, 0, 0, 1, 0, 0);
   context.clearRect(0, 0, width, height);
@@ -166,6 +178,46 @@ function requestDraw() {
     updateStoryInterface(progress, frameIndex);
     pendingDraw = false;
   });
+}
+
+function drawStoryAtProgress(progress) {
+  const startFrame = getStartFrame();
+  const frameIndex = Math.round(startFrame + progress * (frameCount - 1 - startFrame));
+  drawFrame(frameIndex);
+  updateStoryCards(progress);
+  updateStoryInterface(progress, frameIndex);
+}
+
+function animateStory() {
+  storyAnimationFrame = 0;
+
+  const delta = targetStoryProgress - currentStoryProgress;
+  const mobile = isMobileViewport();
+  const smoothing = mobile ? 0.14 : 0.2;
+
+  if (Math.abs(delta) < 0.0015) {
+    currentStoryProgress = targetStoryProgress;
+    drawStoryAtProgress(currentStoryProgress);
+    return;
+  }
+
+  currentStoryProgress += delta * smoothing;
+  drawStoryAtProgress(currentStoryProgress);
+  storyAnimationFrame = window.requestAnimationFrame(animateStory);
+}
+
+function syncStoryProgress(immediate = false) {
+  targetStoryProgress = getStoryProgress();
+
+  if (immediate) {
+    currentStoryProgress = targetStoryProgress;
+    drawStoryAtProgress(currentStoryProgress);
+    return;
+  }
+
+  if (!storyAnimationFrame) {
+    storyAnimationFrame = window.requestAnimationFrame(animateStory);
+  }
 }
 
 function updateChrome() {
@@ -267,12 +319,12 @@ function initAmbientBackground() {
 
 function onScroll() {
   updateChrome();
-  requestDraw();
+  syncStoryProgress();
 }
 
 function onResize() {
   resizeCanvas();
-  requestDraw();
+  syncStoryProgress(true);
 }
 
 window.addEventListener("scroll", onScroll, { passive: true });
@@ -281,4 +333,9 @@ window.addEventListener("resize", onResize, { passive: true });
 updateChrome();
 initMetrics();
 initAmbientBackground();
-preloadFrames().then(() => requestDraw());
+preloadFrames().then(() => {
+  currentStoryProgress = getStoryProgress();
+  targetStoryProgress = currentStoryProgress;
+  requestDraw();
+  syncStoryProgress(true);
+});
