@@ -23,6 +23,7 @@ let pendingDraw = false;
 let storyAnimationFrame = 0;
 let targetStoryProgress = 0;
 let currentStoryProgress = 0;
+let mobileVideoReady = false;
 
 function isMobileViewport() {
   return window.innerWidth < 820;
@@ -50,15 +51,38 @@ function setLoaderProgress() {
   }
 }
 
+function getStoryProgressRange() {
+  if (isMobileViewport()) {
+    return { start: 0.12, end: 0.78 };
+  }
+
+  return { start: 0.08, end: 0.88 };
+}
+
 function preloadFrames() {
   if (isMobileViewport()) {
     loadedFrames = frameCount;
     setLoaderProgress();
-    if (sequenceVideo) {
-      sequenceVideo.currentTime = 0;
-      sequenceVideo.play().catch(() => {});
+    if (!sequenceVideo) {
+      return Promise.resolve();
     }
-    return Promise.resolve();
+
+    return new Promise((resolve) => {
+      const onReady = () => {
+        mobileVideoReady = true;
+        sequenceVideo.pause();
+        sequenceVideo.currentTime = 0;
+        resolve();
+      };
+
+      if (sequenceVideo.readyState >= 1) {
+        onReady();
+        return;
+      }
+
+      sequenceVideo.addEventListener("loadedmetadata", onReady, { once: true });
+      sequenceVideo.load();
+    });
   }
 
   const jobs = [];
@@ -145,7 +169,9 @@ function clamp(value, min, max) {
 function getStoryProgress() {
   const start = storySection.offsetTop;
   const end = start + storySection.offsetHeight - window.innerHeight;
-  return clamp((window.scrollY - start) / (end - start), 0, 1);
+  const rawProgress = clamp((window.scrollY - start) / (end - start), 0, 1);
+  const range = getStoryProgressRange();
+  return clamp((rawProgress - range.start) / (range.end - range.start), 0, 1);
 }
 
 function updateStoryCards(progress) {
@@ -175,10 +201,6 @@ function updateStoryInterface(progress, frameIndex) {
 }
 
 function requestDraw() {
-  if (isMobileViewport()) {
-    return;
-  }
-
   if (pendingDraw) {
     return;
   }
@@ -196,13 +218,21 @@ function requestDraw() {
 }
 
 function drawStoryAtProgress(progress) {
-  if (isMobileViewport()) {
-    return;
-  }
-
   const startFrame = getStartFrame();
   const frameIndex = Math.round(startFrame + progress * (frameCount - 1 - startFrame));
-  drawFrame(frameIndex);
+
+  if (isMobileViewport()) {
+    if (sequenceVideo && mobileVideoReady) {
+      const duration = sequenceVideo.duration || 5.04;
+      const targetTime = clamp(progress, 0, 1) * duration;
+      if (Math.abs(sequenceVideo.currentTime - targetTime) > 0.04) {
+        sequenceVideo.currentTime = targetTime;
+      }
+    }
+  } else {
+    drawFrame(frameIndex);
+  }
+
   updateStoryCards(progress);
   updateStoryInterface(progress, frameIndex);
 }
@@ -226,10 +256,6 @@ function animateStory() {
 }
 
 function syncStoryProgress(immediate = false) {
-  if (isMobileViewport()) {
-    return;
-  }
-
   targetStoryProgress = getStoryProgress();
 
   if (immediate) {
@@ -342,16 +368,15 @@ function initAmbientBackground() {
 
 function onScroll() {
   updateChrome();
-  if (!isMobileViewport()) {
-    syncStoryProgress();
-  }
+  syncStoryProgress();
 }
 
 function onResize() {
   if (!isMobileViewport()) {
     resizeCanvas();
-    syncStoryProgress(true);
   }
+
+  syncStoryProgress(true);
 }
 
 window.addEventListener("scroll", onScroll, { passive: true });
@@ -361,14 +386,11 @@ updateChrome();
 initMetrics();
 initAmbientBackground();
 preloadFrames().then(() => {
-  if (isMobileViewport()) {
-    updateStoryCards(0);
-    updateStoryInterface(0, getStartFrame());
-    return;
-  }
-
   currentStoryProgress = getStoryProgress();
   targetStoryProgress = currentStoryProgress;
-  requestDraw();
   syncStoryProgress(true);
+
+  if (!isMobileViewport()) {
+    requestDraw();
+  }
 });
