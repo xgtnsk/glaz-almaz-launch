@@ -1247,8 +1247,10 @@ textarea {
 
   .hero__title {
     max-width: 100%;
-    font-size: clamp(29px, 10.2vw, 44px);
+    font-size: clamp(22px, 8.2vw, 34px);
     line-height: 0.9;
+    overflow-wrap: anywhere;
+    word-break: break-word;
   }
 
   .hero__lead {
@@ -1331,6 +1333,14 @@ textarea {
     border-radius: 28px;
   }
 
+  .story__headline h2 {
+    max-width: 270px;
+    font-size: clamp(22px, 8vw, 32px);
+    line-height: 0.92;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+
   .story__frame-ui {
     flex-direction: column;
     align-items: flex-start;
@@ -1409,6 +1419,9 @@ textarea {
   .section-head h2 {
     font-size: clamp(18px, 7.4vw, 28px);
     line-height: 0.92;
+    max-width: 320px;
+    overflow-wrap: anywhere;
+    word-break: break-word;
   }
 
   .metrics,
