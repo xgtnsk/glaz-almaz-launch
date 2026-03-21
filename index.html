@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ГЛАЗ-АЛМАЗ | Премиальная оптика</title>
+    <meta
+      name="description"
+      content="Премиальный scroll-driven сайт для салона оптики ГЛАЗ-АЛМАЗ: очки, контактные линзы, проверка зрения, изготовление и подбор."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="icon" type="image/png" href="./assets/logo.png" />
+    <link rel="stylesheet" href="./tilda-fonts.css" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="loader" id="loader">
+      <div class="loader__inner glass-panel">
+        <img class="loader__logo" src="./assets/logo.png" alt="ГЛАЗ-АЛМАЗ" />
+        <p class="loader__label">Собираем оптическую сцену</p>
+        <div class="loader__bar">
+          <span id="loader-bar"></span>
+        </div>
+        <p class="loader__value" id="loader-value">0%</p>
+      </div>
+    </div>
+
+    <canvas id="ambient-canvas" aria-hidden="true"></canvas>
+    <div class="scroll-progress" id="scroll-progress"></div>
+
+    <header class="topbar" id="topbar">
+      <div class="topbar__inner">
+        <a class="topbar__brand" href="#hero" aria-label="ГЛАЗ-АЛМАЗ">
+          <img src="./assets/logo.png" alt="ГЛАЗ-АЛМАЗ" />
+        </a>
+        <nav class="topbar__nav">
+          <a href="#story">3D-сцена</a>
+          <a href="#services">Услуги</a>
+          <a href="#locations">Салоны</a>
+        </nav>
+        <div class="topbar__actions">
+          <a class="chip chip--light" href="tel:+79139456365">+7 (913) 945-63-65</a>
+          <a class="chip topbar__cta" href="#contact">Оставить заявку</a>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero" id="hero">
+        <div class="hero__glow hero__glow--left"></div>
+        <div class="hero__glow hero__glow--right"></div>
+        <div class="section-shell hero__grid">
+          <div class="hero__copy">
+            <p class="eyebrow">Салон оптики. Новосибирск и Бердск</p>
+            <h1 class="hero__title">
+              <span>ЧЕТКИЙ МИР</span>
+              <span class="hero__title-accent">ПРЕМИАЛЬНАЯ</span>
+              <span>ОПРАВА</span>
+            </h1>
+            <p class="hero__lead">
+              Подбор оправ и очковых линз, контактная коррекция, изготовление заказа,
+              солнцезащитные очки и проверка зрения в фирменной эстетике ГЛАЗ-АЛМАЗ.
+            </p>
+            <div class="hero__actions">
+              <a class="button button--primary" href="#story">Смотреть 3D-презентацию</a>
+              <a class="button button--ghost" href="https://www.глаз-алмаз.рус/" target="_blank" rel="noreferrer">
+                На основной сайт
+              </a>
+            </div>
+            <ul class="hero__list">
+              <li>Контактные линзы со скидкой 5%</li>
+              <li>Футляр в подарок по кодовому слову «Алмаз»</li>
+              <li>Бесплатное изготовление очков по промо-офферу</li>
+            </ul>
+          </div>
+
+          <div class="hero__visual">
+            <div class="hero-card hero-card--main glass-panel">
+              <div class="hero-card__top">
+                <span class="eyebrow eyebrow--small">Оптический launch-screen</span>
+              </div>
+              <div class="hero-card__image">
+                <img src="./assets/eye-hero.jpg" alt="Глаз-Алмаз" />
+              </div>
+              <div class="hero-card__bottom">
+                <p>Холодный свет, чистый белый и premium-эстетика без визуального шума.</p>
+              </div>
+            </div>
+            <div class="hero-card hero-card--floating glass-panel">
+              <p class="hero-card__eyebrow">4 салона</p>
+              <p class="hero-card__text">Новосибирск и Бердск. Несколько точек входа без лишнего поиска.</p>
+            </div>
+            <div class="hero-card hero-card--floating hero-card--alt glass-panel">
+              <p class="hero-card__eyebrow">5 услуг</p>
+              <p class="hero-card__text">Линзы, оправы, проверка зрения и изготовление заказа.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="story" id="story">
+        <div class="story__scroll-area">
+          <div class="story__sticky">
+            <div class="section-shell story__grid">
+              <div class="story__frame glass-panel">
+                <div class="story__headline">
+                  <p class="eyebrow eyebrow--small">Scroll-driven 3D block</p>
+                  <h2>Очки раскрываются по скроллу</h2>
+                </div>
+                <div class="story__frame-ui">
+                  <div class="story-meter glass-panel">
+                    <span class="story-meter__label">Frame</span>
+                    <strong id="story-meter-value">001</strong>
+                    <span class="story-meter__total">/101</span>
+                  </div>
+                  <div class="story-pills">
+                    <span class="story-pill active" data-start="0" data-end="0.25">зрение</span>
+                    <span class="story-pill" data-start="0.25" data-end="0.58">оправа</span>
+                    <span class="story-pill" data-start="0.58" data-end="0.82">линзы</span>
+                    <span class="story-pill" data-start="0.82" data-end="1">выдача</span>
+                  </div>
+                </div>
+                <div class="story-overlay story-overlay--left glass-panel">
+                  <span class="story-overlay__label">Optical composition</span>
+                  <strong>зрение / оправа / линзы / готовые очки</strong>
+                </div>
+                <div class="story-overlay story-overlay--right glass-panel">
+                  <span class="story-overlay__label">Scroll progress</span>
+                  <strong id="story-progress-value">0%</strong>
+                </div>
+                <canvas id="sequence-canvas" aria-label="3D-презентация очков"></canvas>
+                <div class="story__hint">Скролл управляет каждым кадром видео</div>
+              </div>
+              <div class="story__cards">
+                <article class="story-card glass-panel active" data-start="0" data-end="0.25">
+                  <span class="story-card__index">01</span>
+                  <h3>Прием офтальмолога</h3>
+                  <p>Проверка зрения и первичная диагностика. Спокойный старт, чтобы подобрать очки уже на точной основе.</p>
+                </article>
+                <article class="story-card glass-panel" data-start="0.25" data-end="0.58">
+                  <span class="story-card__index">02</span>
+                  <h3>Выбор оправы</h3>
+                  <p>Подбор оправы под ваш стиль, форму лица и комфортную посадку, чтобы очки работали и визуально, и в носке.</p>
+                </article>
+                <article class="story-card glass-panel" data-start="0.58" data-end="0.82">
+                  <span class="story-card__index">03</span>
+                  <h3>Подбор линз</h3>
+                  <p>Выбор линз с необходимыми диоптриями и покрытиями под ваш сценарий: работа, вождение, чтение или повседневная носка.</p>
+                </article>
+                <article class="story-card glass-panel" data-start="0.82" data-end="1">
+                  <span class="story-card__index">04</span>
+                  <h3>Изготовление и выдача</h3>
+                  <p>Изготовление заказа в мастерской, затем аккуратная выдача готовых очков клиенту с финальной проверкой посадки.</p>
+                </article>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="metrics section-shell">
+        <div class="metric glass-panel">
+          <span class="metric__value" data-target="4">0</span>
+          <span class="metric__label">адреса салонов</span>
+        </div>
+        <div class="metric glass-panel">
+          <span class="metric__value" data-target="5">0</span>
+          <span class="metric__label">основных услуг</span>
+        </div>
+        <div class="metric glass-panel">
+          <span class="metric__value" data-target="2">0</span>
+          <span class="metric__label">горячих оффера</span>
+        </div>
+        <div class="metric glass-panel">
+          <span class="metric__value metric__value--small" data-target="2026">0</span>
+          <span class="metric__label">актуальный промо-год</span>
+        </div>
+      </section>
+
+      <section class="services section-shell" id="services">
+        <div class="section-head">
+          <p class="eyebrow">Услуги</p>
+          <h2>Оптика, собранная как premium product</h2>
+        </div>
+        <div class="services__grid">
+          <article class="service glass-panel">
+            <h3>Подбор оправ</h3>
+            <p>Форма, посадка, баланс, образ и комфорт в одном сценарии консультации.</p>
+          </article>
+          <article class="service glass-panel">
+            <h3>Очковые линзы</h3>
+            <p>Точная коррекция, рекомендации по покрытию и визуальная чистота на каждый день.</p>
+          </article>
+          <article class="service glass-panel">
+            <h3>Контактная коррекция</h3>
+            <p>Контактные линзы с понятной подачей, быстрым выбором и отдельным акцентом на промо.</p>
+          </article>
+          <article class="service glass-panel">
+            <h3>Изготовление заказа</h3>
+            <p>От выбора оправы до финальной сборки с ощущением аккуратного сервисного бренда.</p>
+          </article>
+          <article class="service glass-panel">
+            <h3>Проверка зрения</h3>
+            <p>Понятный маршрут пользователя: диагностика, подбор, оформление и повторный визит.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="offers section-shell">
+        <div class="section-head">
+          <p class="eyebrow">Актуальные офферы</p>
+          <h2>Промо, которые можно сразу встроить в новый launch</h2>
+        </div>
+        <div class="offers__grid">
+          <article class="offer offer--dark glass-panel">
+            <p class="offer__tag">Контактные линзы</p>
+            <h3>Скидка 5% по промокоду «ЛИЗНИ КАЧЕЛЬКУ»</h3>
+            <p>Промо с быстрым переходом в заявку, Telegram или на основной сайт.</p>
+            <a class="button button--ghost" href="https://t.me/+tFxzZ6C-a3BkZmIy" target="_blank" rel="noreferrer">
+              Написать в Telegram
+            </a>
+          </article>
+          <article class="offer offer--image glass-panel">
+            <div class="offer__media">
+              <img src="./assets/promo-case.png" alt="Футляр Глаз-Алмаз" />
+            </div>
+            <div class="offer__copy">
+              <p class="offer__tag">Подарок к заказу</p>
+              <h3>Кодовое слово «Алмаз» дает фирменный футляр</h3>
+              <p>Визуально этот блок уже поддержан существующим брендингом и фирменным синим материалом.</p>
+            </div>
+          </article>
+          <article class="offer glass-panel">
+            <p class="offer__tag">Лид-магнит</p>
+            <h3>Бесплатное изготовление очков</h3>
+            <p>В новой версии это можно вынести в отдельный final CTA с фиксированной кнопкой.</p>
+            <a class="button button--primary" href="#contact">Перейти к контактам</a>
+          </article>
+        </div>
+      </section>
+
+      <section class="locations section-shell" id="locations">
+        <div class="section-head">
+          <p class="eyebrow">Салоны</p>
+          <h2>Точки присутствия и прямой контакт</h2>
+        </div>
+        <div class="locations__layout">
+          <div class="locations-map glass-panel">
+            <div class="locations-map__head">
+              <p class="eyebrow eyebrow--small">Навигация по салонам</p>
+              <h3>4 точки без лишнего поиска</h3>
+              <p>Выберите ближайший салон, сценарий визита и сразу переходите к звонку или записи.</p>
+            </div>
+            <div class="locations-map__stats">
+              <div class="locations-stat">
+                <strong>4</strong>
+                <span>салона</span>
+              </div>
+              <div class="locations-stat">
+                <strong>2</strong>
+                <span>города</span>
+              </div>
+              <div class="locations-stat">
+                <strong>1</strong>
+                <span>быстрый маршрут</span>
+              </div>
+            </div>
+            <div class="locations-route">
+              <article class="locations-route__item">
+                <span class="locations-route__index">01</span>
+                <div class="locations-route__copy">
+                  <strong>Европейский берег</strong>
+                  <small>Шоу-рум, проверка зрения, оправы, линзы</small>
+                </div>
+              </article>
+              <article class="locations-route__item">
+                <span class="locations-route__index">02</span>
+                <div class="locations-route__copy">
+                  <strong>Бердск</strong>
+                  <small>Быстрый визит, подбор оправы и линз</small>
+                </div>
+              </article>
+              <article class="locations-route__item">
+                <span class="locations-route__index">03</span>
+                <div class="locations-route__copy">
+                  <strong>ТРК «ЭДЕМ»</strong>
+                  <small>Точка в Академгородке с двумя номерами связи</small>
+                </div>
+              </article>
+              <article class="locations-route__item">
+                <span class="locations-route__index">04</span>
+                <div class="locations-route__copy">
+                  <strong>Выборная</strong>
+                  <small>Удобный вход для повторного визита и выдачи</small>
+                </div>
+              </article>
+            </div>
+            <div class="locations-map__actions">
+              <a class="button button--primary" href="tel:+79139456365">Позвонить</a>
+              <a
+                class="button button--ghost"
+                href="https://t.me/+tFxzZ6C-a3BkZmIy"
+                target="_blank"
+                rel="noreferrer"
+              >
+                Telegram
+              </a>
+            </div>
+          </div>
+
+          <div class="locations-list">
+            <article class="location glass-panel">
+              <div class="location__head">
+                <span class="location__badge">01</span>
+                <h3>Главный офис / шоу-рум</h3>
+              </div>
+              <p>Новосибирск, мкрн. Европейский берег,<br />ул. В. Заровного, 32</p>
+              <div class="location__meta">
+                <span>Проверка зрения</span>
+                <span>Подбор оправ</span>
+                <span>Линзы</span>
+              </div>
+              <div class="location__actions">
+                <a href="tel:+79134861986">+7 (913) 486-19-86</a>
+                <a href="#contact">Записаться</a>
+              </div>
+            </article>
+
+            <article class="location glass-panel">
+              <div class="location__head">
+                <span class="location__badge">02</span>
+                <h3>Бердск</h3>
+              </div>
+              <p>ул. Ленина, 33</p>
+              <div class="location__meta">
+                <span>Оправы</span>
+                <span>Линзы</span>
+                <span>Консультация</span>
+              </div>
+              <div class="location__actions">
+                <a href="tel:+79134615559">+7 (913) 461-55-59</a>
+                <a href="#contact">Записаться</a>
+              </div>
+            </article>
+
+            <article class="location glass-panel">
+              <div class="location__head">
+                <span class="location__badge">03</span>
+                <h3>ТРК «ЭДЕМ»</h3>
+              </div>
+              <p>Новосибирск, ул. Кутателадзе, 4, 1 этаж</p>
+              <div class="location__meta">
+                <span>Академгородок</span>
+                <span>Два номера</span>
+                <span>Подбор линз</span>
+              </div>
+              <div class="location__actions">
+                <a href="tel:+73832995553">+7 (383) 299-55-53</a>
+                <a href="tel:+79139175553">+7 (913) 917-55-53</a>
+              </div>
+            </article>
+
+            <article class="location glass-panel">
+              <div class="location__head">
+                <span class="location__badge">04</span>
+                <h3>Выборная</h3>
+              </div>
+              <p>Новосибирск, ул. Выборная, 89/2</p>
+              <div class="location__meta">
+                <span>Выдача</span>
+                <span>Повторный визит</span>
+                <span>Оправы</span>
+              </div>
+              <div class="location__actions">
+                <a href="tel:+79130116413">+7 (913) 011-64-13</a>
+                <a href="#contact">Записаться</a>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="contact section-shell" id="contact">
+        <div class="contact__panel glass-panel">
+          <div class="contact__copy">
+            <p class="eyebrow">Запись и консультация</p>
+            <h2>Выберите сценарий визита и зайдите в салон без лишних шагов</h2>
+            <p>
+              Подбор оправ, контактные линзы, проверка зрения и изготовление заказа можно
+              обернуть в реальный production-flow: быстрый звонок, Telegram или переход в
+              основной сайт.
+            </p>
+            <div class="contact__chips">
+              <span class="contact-chip">Подбор оправ</span>
+              <span class="contact-chip">Контактные линзы</span>
+              <span class="contact-chip">Проверка зрения</span>
+              <span class="contact-chip">Изготовление очков</span>
+            </div>
+            <div class="contact__notes">
+              <div class="contact-note glass-panel">
+                <span class="contact-note__label">Что взять с собой</span>
+                <strong>старые очки, рецепт, линзы или упаковку</strong>
+              </div>
+              <div class="contact-note glass-panel">
+                <span class="contact-note__label">Среднее время визита</span>
+                <strong>15-30 минут на первичную консультацию</strong>
+              </div>
+            </div>
+          </div>
+          <div class="contact__booking">
+            <div class="contact-booking__head">
+              <span class="contact-booking__eyebrow">Quick booking</span>
+              <h3>Самый быстрый маршрут в ГЛАЗ-АЛМАЗ</h3>
+            </div>
+            <div class="contact__actions">
+              <a class="button button--primary" href="tel:+79139456365">Позвонить сейчас</a>
+              <a class="button button--ghost" href="https://t.me/+tFxzZ6C-a3BkZmIy" target="_blank" rel="noreferrer">
+                Telegram
+              </a>
+              <a class="button button--ghost" href="https://www.instagram.com/glaz.almaz/?hl=ru" target="_blank" rel="noreferrer">
+                Instagram
+              </a>
+            </div>
+            <div class="contact-rail">
+              <div class="contact-rail__item">
+                <span>Главный номер</span>
+                <strong>+7 (913) 945-63-65</strong>
+              </div>
+              <div class="contact-rail__item">
+                <span>Telegram</span>
+                <strong>@glazalmaz</strong>
+              </div>
+              <div class="contact-rail__item">
+                <span>Салоны</span>
+                <strong>4 адреса</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="section-shell footer__inner">
+        <img src="./assets/logo.png" alt="ГЛАЗ-АЛМАЗ" />
+        <div class="footer__links">
+          <a href="https://www.глаз-алмаз.рус/" target="_blank" rel="noreferrer">Основной сайт</a>
+          <a href="https://glaz-almaz.com/" target="_blank" rel="noreferrer">Текущий промо-сайт</a>
+        </div>
+      </div>
+    </footer>
+
+    <div class="mobile-dock">
+      <a class="mobile-dock__button mobile-dock__button--primary" href="tel:+79139456365">Позвонить</a>
+      <a class="mobile-dock__button" href="https://t.me/+tFxzZ6C-a3BkZmIy" target="_blank" rel="noreferrer">
+        Telegram
+      </a>
+    </div>
+
+    <script src="./app.js"></script>
+  </body>
+</html>
