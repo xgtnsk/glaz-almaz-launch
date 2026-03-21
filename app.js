@@ -20,6 +20,10 @@ let loadedFrames = 0;
 let activeFrame = -1;
 let pendingDraw = false;
 
+function getStartFrame() {
+  return window.innerWidth < 820 ? 8 : 0;
+}
+
 function framePath(index) {
   return `./frames/frame_${String(index + 1).padStart(3, "0")}.jpg`;
 }
@@ -47,7 +51,7 @@ function preloadFrames() {
           setLoaderProgress();
           if (index === 0) {
             resizeCanvas();
-            drawFrame(0);
+            drawFrame(getStartFrame());
           }
           resolve();
         };
@@ -155,7 +159,8 @@ function requestDraw() {
   pendingDraw = true;
   window.requestAnimationFrame(() => {
     const progress = getStoryProgress();
-    const frameIndex = Math.round(progress * (frameCount - 1));
+    const startFrame = getStartFrame();
+    const frameIndex = Math.round(startFrame + progress * (frameCount - 1 - startFrame));
     drawFrame(frameIndex);
     updateStoryCards(progress);
     updateStoryInterface(progress, frameIndex);

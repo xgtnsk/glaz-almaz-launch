@@ -1207,30 +1207,33 @@ textarea {
   }
 
   .topbar {
-    top: 12px;
+    top: 8px;
+    width: min(calc(100vw - 16px), 420px);
   }
 
   .topbar__inner {
-    grid-template-columns: 1fr;
-    justify-items: center;
-    border-radius: 24px;
-    padding: 8px 10px;
-    gap: 8px;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    justify-items: stretch;
+    border-radius: 18px;
+    padding: 8px 12px;
+    gap: 12px;
   }
 
   .topbar__brand img {
-    width: 126px;
+    width: 110px;
   }
 
   .topbar__actions {
     width: auto;
-    justify-content: center;
+    justify-content: flex-end;
   }
 
   .chip {
-    min-height: 36px;
-    padding: 0 14px;
-    font-size: 11px;
+    min-height: 34px;
+    padding: 0 12px;
+    font-size: 10px;
+    letter-spacing: 0.06em;
   }
 
   .topbar__cta {
@@ -1238,7 +1241,9 @@ textarea {
   }
 
   .hero {
-    padding-top: 132px;
+    min-height: auto;
+    padding-top: 104px;
+    padding-bottom: 40px;
   }
 
   .hero__title {
@@ -1280,33 +1285,54 @@ textarea {
 
   .hero__visual {
     display: grid;
-    gap: 14px;
+    gap: 12px;
   }
 
   .hero-card--main {
-    padding: 18px;
+    padding: 14px;
   }
 
   .hero-card--floating {
-    padding: 16px;
+    padding: 14px;
+  }
+
+  .hero-card__top {
+    margin-bottom: 8px;
+  }
+
+  .hero-card__bottom {
+    display: none;
+  }
+
+  .hero-card__image {
+    margin: 0;
+    border-radius: 22px;
   }
 
   .story__scroll-area {
-    height: 170vh;
+    height: 148vh;
   }
 
   .story__sticky {
-    padding-top: 150px;
+    align-items: start;
+    padding-top: 92px;
+    min-height: auto;
+  }
+
+  .story__grid {
+    gap: 16px;
   }
 
   .story__frame {
     min-height: auto;
-    padding: 20px;
+    padding: 18px;
+    border-radius: 28px;
   }
 
   .story__frame-ui {
     flex-direction: column;
     align-items: flex-start;
+    margin: 14px 0 14px;
   }
 
   .story-overlay {
@@ -1319,19 +1345,56 @@ textarea {
   }
 
   .story-pills {
-    justify-content: flex-start;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    width: 100%;
+    justify-content: stretch;
+    gap: 8px;
+  }
+
+  .story-pill {
+    justify-content: center;
+    padding: 0 10px;
+    min-height: 40px;
   }
 
   #sequence-canvas {
-    min-height: 52vh;
+    min-height: 38vh;
   }
 
   .story-card {
-    padding: 18px 18px 18px 58px;
+    padding: 16px 16px 16px 52px;
+    opacity: 1;
+    transform: none;
+    border: 1px solid rgba(79, 128, 168, 0.14);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.78), rgba(255, 255, 255, 0.62));
+  }
+
+  .story-card.active {
+    border: 1px solid rgba(79, 128, 168, 0.24);
+    box-shadow: 0 16px 34px rgba(18, 42, 72, 0.1);
+  }
+
+  .story-card__index {
+    top: 16px;
+    left: 16px;
+    font-size: 16px;
+  }
+
+  .story-card h3 {
+    font-size: 17px;
+    line-height: 0.98;
   }
 
   .story-card p {
-    font-size: 14px;
+    margin-top: 10px;
+    font-size: 13px;
+    line-height: 1.55;
+  }
+
+  .story__cards {
+    gap: 10px;
+    padding-bottom: 84px;
   }
 
   .section-head h2 {
