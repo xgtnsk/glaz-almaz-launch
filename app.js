@@ -8,6 +8,7 @@ const canvas = document.getElementById("sequence-canvas");
 const sequenceVideo = document.getElementById("sequence-video");
 const context = canvas.getContext("2d");
 const storySection = document.getElementById("story");
+const storyScrollArea = document.querySelector(".story__scroll-area");
 const storyFrame = document.querySelector(".story__frame");
 const cards = Array.from(document.querySelectorAll(".story-card"));
 const storyPills = Array.from(document.querySelectorAll(".story-pill"));
@@ -146,17 +147,10 @@ function clamp(value, min, max) {
 }
 
 function getStoryProgress() {
-  if (isMobileViewport() && storyFrame) {
-    const rect = storyFrame.getBoundingClientRect();
-    const startLine = window.innerHeight * 0.64;
-    const endLine = window.innerHeight * 0.22;
-    const travel = rect.height + startLine - endLine;
-    return clamp((startLine - rect.top) / travel, 0, 1);
-  }
-
-  const start = storySection.offsetTop;
-  const end = start + storySection.offsetHeight - window.innerHeight;
-  return clamp((window.scrollY - start) / (end - start), 0, 1);
+  const root = storyScrollArea || storySection;
+  const start = root.offsetTop;
+  const end = start + root.offsetHeight - window.innerHeight;
+  return clamp((window.scrollY - start) / Math.max(end - start, 1), 0, 1);
 }
 
 function syncVideoFrame(progress) {
