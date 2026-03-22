@@ -1294,7 +1294,7 @@ textarea {
   }
 
   .story {
-    margin-top: -92px;
+    margin-top: -168px;
   }
 
   .story__scroll-area {
@@ -1311,12 +1311,12 @@ textarea {
   }
 
   .story__grid {
-    gap: 6px;
+    gap: 8px;
   }
 
   .story__frame {
     min-height: auto;
-    padding: 10px;
+    padding: 10px 10px 12px;
     border-radius: 28px;
   }
 
@@ -1343,16 +1343,16 @@ textarea {
   }
 
   #sequence-canvas {
-    display: none;
-  }
-
-  .story__video {
     display: block;
+    height: auto;
     min-height: auto;
     aspect-ratio: 1 / 1;
     border-radius: 24px;
-    transform: translateZ(0);
-    will-change: transform;
+    background: #fff;
+  }
+
+  .story__video {
+    display: none;
   }
 
   .story-meter,

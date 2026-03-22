@@ -19,15 +19,15 @@ const ambientCanvas = document.getElementById("ambient-canvas");
 const ambientContext = ambientCanvas.getContext("2d");
 
 const imageCache = [];
+const mobileFrameStep = 2;
 let loadedFrames = 0;
+let totalFramesToLoad = frameCount;
 let activeFrame = -1;
 let pendingDraw = false;
 let storyAnimationFrame = 0;
 let targetStoryProgress = 0;
 let currentStoryProgress = 0;
 let videoReady = false;
-let mobileVideoLoopFrame = 0;
-let mobileVideoObserver = null;
 
 function isMobileViewport() {
   return window.innerWidth < 820;
@@ -46,30 +46,82 @@ function framePath(index) {
   return `./frames/frame_${String(index + 1).padStart(3, "0")}.jpg`;
 }
 
+function getFrameIndexes() {
+  if (!isMobileViewport()) {
+    return Array.from({ length: frameCount }, (_, index) => index);
+  }
+
+  const startFrame = getStartFrame();
+  const indexes = [startFrame];
+
+  for (let index = startFrame + mobileFrameStep; index < frameCount; index += mobileFrameStep) {
+    indexes.push(index);
+  }
+
+  if (indexes[0] !== 0) {
+    indexes.unshift(0);
+  }
+
+  if (indexes[indexes.length - 1] !== frameCount - 1) {
+    indexes.push(frameCount - 1);
+  }
+
+  return indexes;
+}
+
+function getCachedFrameIndex(index) {
+  if (!isMobileViewport()) {
+    return index;
+  }
+
+  const startFrame = getStartFrame();
+
+  if (index <= startFrame) {
+    return startFrame;
+  }
+
+  const steppedIndex = startFrame + Math.round((index - startFrame) / mobileFrameStep) * mobileFrameStep;
+  const clampedIndex = clamp(steppedIndex, startFrame, frameCount - 1);
+
+  if (imageCache[clampedIndex]) {
+    return clampedIndex;
+  }
+
+  for (let offset = 1; offset < frameCount; offset += 1) {
+    const previous = clampedIndex - offset;
+    const next = clampedIndex + offset;
+
+    if (previous >= 0 && imageCache[previous]) {
+      return previous;
+    }
+
+    if (next < frameCount && imageCache[next]) {
+      return next;
+    }
+  }
+
+  return startFrame;
+}
+
 function setLoaderProgress() {
-  const progress = Math.round((loadedFrames / frameCount) * 100);
+  const progress = Math.round((loadedFrames / totalFramesToLoad) * 100);
   loaderBar.style.width = `${progress}%`;
   loaderValue.textContent = `${progress}%`;
-  if (loadedFrames === frameCount) {
+  if (loadedFrames === totalFramesToLoad) {
     window.setTimeout(() => loader.classList.add("is-hidden"), 180);
   }
 }
 
 function preloadFrames() {
-  if (isMobileViewport()) {
-    loadedFrames = frameCount;
-    setLoaderProgress();
-    if (sequenceVideo) {
-      sequenceVideo.currentTime = 0;
-      sequenceVideo.pause();
-      sequenceVideo.load();
-    }
-    return Promise.resolve();
-  }
-
+  const frameIndexes = getFrameIndexes();
   const jobs = [];
+  const startFrame = getStartFrame();
 
-  for (let index = 0; index < frameCount; index += 1) {
+  loadedFrames = 0;
+  totalFramesToLoad = frameIndexes.length;
+  activeFrame = -1;
+
+  for (const index of frameIndexes) {
     jobs.push(
       new Promise((resolve) => {
         const image = new Image();
@@ -78,9 +130,9 @@ function preloadFrames() {
           imageCache[index] = image;
           loadedFrames += 1;
           setLoaderProgress();
-          if (index === 0) {
+          if (index === startFrame) {
             resizeCanvas();
-            drawFrame(getStartFrame());
+            drawFrame(startFrame);
           }
           resolve();
         };
@@ -104,7 +156,7 @@ function resizeCanvas() {
 }
 
 function drawFrame(index) {
-  const image = imageCache[index];
+  const image = imageCache[getCachedFrameIndex(index)];
   if (!image || index === activeFrame) {
     return;
   }
@@ -151,43 +203,25 @@ function clamp(value, min, max) {
 function getStoryProgress() {
   if (isMobileViewport()) {
     const rect = storySection.getBoundingClientRect();
-    const startLine = window.innerHeight * 0.9;
-    const endLine = window.innerHeight * 0.3;
+    const startLine = window.innerHeight * 0.84;
+    const endLine = window.innerHeight * 0.18;
     const travel = rect.height + startLine - endLine;
     const rawProgress = clamp((startLine - rect.top) / Math.max(travel, 1), 0, 1);
-    return clamp((rawProgress + 0.01) / 0.86, 0, 1);
+    return clamp((rawProgress - 0.03) / 0.8, 0, 1);
   }
 
   const root = storyScrollArea || storySection;
-  const start = root.offsetTop;
-  const end = start + root.offsetHeight - window.innerHeight;
-  const rawProgress = clamp((window.scrollY - start) / Math.max(end - start, 1), 0, 1);
-  return clamp((rawProgress - 0.96) / 0.04, 0, 1);
-}
+  const frameRect = storyFrame.getBoundingClientRect();
+  const holdLine = window.innerHeight * 0.52;
 
-function syncVideoFrame(progress) {
-  if (!sequenceVideo || !videoReady || !sequenceVideo.duration) {
-    return;
-  }
-
-  const startOffset = getStartFrame() / (frameCount - 1);
-  const mobileProgress = isMobileViewport() ? clamp(progress, 0, 1) * 0.96 : clamp(progress, 0, 1);
-  const mappedProgress = startOffset + mobileProgress * (1 - startOffset);
-  const targetTime = mappedProgress * sequenceVideo.duration;
-
-  if (Math.abs(sequenceVideo.currentTime - targetTime) > 0.012) {
-    sequenceVideo.currentTime = targetTime;
-  }
-}
-
-function getMobileVideoProgress() {
-  if (!sequenceVideo || !sequenceVideo.duration) {
+  if (frameRect.top > holdLine) {
     return 0;
   }
 
-  const startOffset = getStartFrame() / (frameCount - 1);
-  const currentRatio = sequenceVideo.currentTime / sequenceVideo.duration;
-  return clamp((currentRatio - startOffset) / Math.max(1 - startOffset, 0.0001), 0, 1);
+  const start = root.getBoundingClientRect().top + window.scrollY;
+  const end = start + root.offsetHeight - window.innerHeight;
+  const rawProgress = clamp((window.scrollY - start) / Math.max(end - start, 1), 0, 1);
+  return clamp((rawProgress - 0.2) / 0.8, 0, 1);
 }
 
 function updateStoryCards(progress) {
@@ -217,10 +251,6 @@ function updateStoryInterface(progress, frameIndex) {
 }
 
 function requestDraw() {
-  if (isMobileViewport()) {
-    return;
-  }
-
   if (pendingDraw) {
     return;
   }
@@ -240,15 +270,7 @@ function requestDraw() {
 function drawStoryAtProgress(progress) {
   const startFrame = getStartFrame();
   const frameIndex = Math.round(startFrame + progress * (frameCount - 1 - startFrame));
-
-  if (isMobileViewport()) {
-    updateStoryCards(progress);
-    updateStoryInterface(progress, frameIndex);
-    return;
-  } else {
-    drawFrame(frameIndex);
-  }
-
+  drawFrame(frameIndex);
   updateStoryCards(progress);
   updateStoryInterface(progress, frameIndex);
 }
@@ -269,99 +291,6 @@ function animateStory() {
   currentStoryProgress += delta * smoothing;
   drawStoryAtProgress(currentStoryProgress);
   storyAnimationFrame = window.requestAnimationFrame(animateStory);
-}
-
-function stopMobileVideoLoop() {
-  if (mobileVideoLoopFrame) {
-    window.cancelAnimationFrame(mobileVideoLoopFrame);
-    mobileVideoLoopFrame = 0;
-  }
-}
-
-function tickMobileVideoUi() {
-  mobileVideoLoopFrame = 0;
-
-  if (!isMobileViewport() || !sequenceVideo || sequenceVideo.paused || !videoReady) {
-    return;
-  }
-
-  const progress = getMobileVideoProgress();
-  const frameIndex = Math.round(getStartFrame() + progress * (frameCount - 1 - getStartFrame()));
-  updateStoryCards(progress);
-  updateStoryInterface(progress, frameIndex);
-  mobileVideoLoopFrame = window.requestAnimationFrame(tickMobileVideoUi);
-}
-
-function startMobileVideoLoop() {
-  if (!mobileVideoLoopFrame) {
-    mobileVideoLoopFrame = window.requestAnimationFrame(tickMobileVideoUi);
-  }
-}
-
-function initMobileVideoPlayback() {
-  if (!sequenceVideo) {
-    return;
-  }
-
-  if (mobileVideoObserver) {
-    mobileVideoObserver.disconnect();
-  }
-
-  const startFromVisibleFrame = () => {
-    if (!sequenceVideo.duration) {
-      return;
-    }
-
-    const startOffset = getStartFrame() / (frameCount - 1);
-    const startTime = startOffset * sequenceVideo.duration;
-
-    if (sequenceVideo.currentTime < startTime || sequenceVideo.currentTime >= sequenceVideo.duration - 0.04) {
-      sequenceVideo.currentTime = startTime;
-    }
-  };
-
-  const playVisibleSegment = () => {
-    if (!isMobileViewport() || !videoReady) {
-      return;
-    }
-
-    startFromVisibleFrame();
-    sequenceVideo.playbackRate = 0.82;
-    sequenceVideo.play().then(() => {
-      startMobileVideoLoop();
-    }).catch(() => {});
-  };
-
-  const stopVisibleSegment = () => {
-    sequenceVideo.pause();
-    stopMobileVideoLoop();
-  };
-
-  sequenceVideo.addEventListener("ended", () => {
-    if (!isMobileViewport()) {
-      return;
-    }
-
-    startFromVisibleFrame();
-    sequenceVideo.play().then(() => {
-      startMobileVideoLoop();
-    }).catch(() => {});
-  });
-
-  mobileVideoObserver = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          playVisibleSegment();
-        } else {
-          stopVisibleSegment();
-        }
-      });
-    },
-    { threshold: 0.35 },
-  );
-
-  mobileVideoObserver.observe(storySection);
 }
 
 function syncStoryProgress(immediate = false) {
@@ -477,21 +406,12 @@ function initAmbientBackground() {
 
 function onScroll() {
   updateChrome();
-  if (!isMobileViewport()) {
-    syncStoryProgress();
-  }
+  syncStoryProgress();
 }
 
 function onResize() {
-  if (!isMobileViewport()) {
-    resizeCanvas();
-    syncStoryProgress(true);
-    return;
-  }
-
-  if (videoReady) {
-    initMobileVideoPlayback();
-  }
+  resizeCanvas();
+  syncStoryProgress(true);
 }
 
 window.addEventListener("scroll", onScroll, { passive: true });
@@ -501,12 +421,6 @@ updateChrome();
 initMetrics();
 initAmbientBackground();
 preloadFrames().then(() => {
-  if (isMobileViewport()) {
-    updateStoryCards(0);
-    updateStoryInterface(0, getStartFrame());
-    return;
-  }
-
   currentStoryProgress = getStoryProgress();
   targetStoryProgress = currentStoryProgress;
   syncStoryProgress(true);
@@ -520,13 +434,6 @@ if (sequenceVideo) {
 
   sequenceVideo.addEventListener("loadeddata", () => {
     videoReady = true;
-    if (isMobileViewport()) {
-      initMobileVideoPlayback();
-      updateStoryCards(0);
-      updateStoryInterface(0, getStartFrame());
-      return;
-    }
-
     syncStoryProgress(true);
   });
 }
