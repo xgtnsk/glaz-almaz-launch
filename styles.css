@@ -278,15 +278,15 @@ textarea {
 
 .hero {
   position: relative;
-  min-height: 78vh;
-  padding: 132px 0 20px;
+  min-height: auto;
+  padding: 132px 0 12px;
 }
 
 .hero__grid {
   display: grid;
   grid-template-columns: minmax(0, 1.04fr) minmax(340px, 0.82fr);
-  align-items: start;
-  gap: 34px;
+  align-items: center;
+  gap: 28px;
 }
 
 .hero__copy,
@@ -338,8 +338,8 @@ textarea {
 .hero__lead {
   max-width: 600px;
   margin: 24px 0 0;
-  font-size: 19px;
-  line-height: 1.62;
+  font-size: 18px;
+  line-height: 1.58;
   color: var(--text-muted);
 }
 
@@ -347,13 +347,13 @@ textarea {
   display: flex;
   flex-wrap: wrap;
   gap: 14px;
-  margin-top: 28px;
+  margin-top: 24px;
 }
 
 .hero__list {
   display: grid;
   gap: 14px;
-  margin: 32px 0 0;
+  margin: 28px 0 0;
   padding: 0;
   list-style: none;
 }
@@ -378,20 +378,20 @@ textarea {
 
 .hero__visual {
   display: grid;
-  gap: 12px;
+  gap: 0;
   align-content: start;
 }
 
 .hero-visual {
-  padding: 16px;
-  border-radius: 34px;
+  padding: 14px;
+  border-radius: 30px;
 }
 
 .hero-visual__image {
   overflow: hidden;
-  padding: 10px;
-  border-radius: 28px;
-  aspect-ratio: 0.92;
+  padding: 8px;
+  border-radius: 24px;
+  aspect-ratio: 0.8;
   background: #fff;
   box-shadow: inset 0 0 0 1px rgba(47, 80, 128, 0.06);
 }
@@ -400,7 +400,7 @@ textarea {
   display: block;
   width: 100%;
   height: 100%;
-  border-radius: 22px;
+  border-radius: 18px;
   object-fit: cover;
   object-position: center center;
 }
@@ -409,6 +409,7 @@ textarea {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 12px;
+  margin-top: 22px;
 }
 
 .hero-fact {
@@ -441,7 +442,7 @@ textarea {
 }
 
 .story__scroll-area {
-  height: 188vh;
+  height: 164vh;
 }
 
 .story__sticky {
@@ -449,15 +450,15 @@ textarea {
   top: 0;
   min-height: 100vh;
   display: grid;
-  align-items: center;
-  padding: 88px 0 36px;
+  align-items: start;
+  padding: 56px 0 28px;
 }
 
 .story__grid {
   display: grid;
   grid-template-columns: minmax(0, 1.35fr) minmax(320px, 0.65fr);
   gap: 24px;
-  align-items: center;
+  align-items: start;
 }
 
 .story__frame {
@@ -1273,6 +1274,7 @@ textarea {
   .hero__facts {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 10px;
+    margin-top: 18px;
   }
 
   .hero-fact {
@@ -1299,7 +1301,7 @@ textarea {
     position: relative;
     top: auto;
     align-items: start;
-    padding-top: 72px;
+    padding-top: 52px;
     padding-bottom: 0;
     min-height: auto;
   }
