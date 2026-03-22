@@ -557,20 +557,20 @@ textarea {
   min-height: 38px;
   padding: 0 14px;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.5);
-  border: 1px solid rgba(47, 80, 128, 0.08);
+  background: rgba(255, 255, 255, 0.56);
+  border: 1px solid rgba(47, 80, 128, 0.1);
   font-size: 11px;
   font-weight: 800;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: rgba(9, 35, 62, 0.48);
-  transition: transform 0.25s ease, background-color 0.25s ease, color 0.25s ease;
+  color: rgba(9, 35, 62, 0.54);
+  transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease;
 }
 
 .story-pill.active {
-  color: var(--blue);
-  background: rgba(255, 255, 255, 0.88);
-  transform: translateY(-2px);
+  color: rgba(9, 35, 62, 0.9);
+  background: rgba(255, 255, 255, 0.8);
+  border-color: rgba(47, 80, 128, 0.16);
 }
 
 .story-overlay {
@@ -984,9 +984,10 @@ textarea {
   width: 42px;
   height: 42px;
   border-radius: 14px;
-  background: rgba(47, 80, 128, 0.08);
+  background: rgba(47, 80, 128, 0.06);
+  border: 1px solid rgba(47, 80, 128, 0.08);
   font-family: "DrukTextWideTT", "Arial Black", sans-serif;
-  color: var(--blue);
+  color: rgba(47, 80, 128, 0.82);
 }
 
 .location__actions {
@@ -1007,12 +1008,13 @@ textarea {
   min-height: 30px;
   padding: 0 12px;
   border-radius: 999px;
-  background: rgba(47, 80, 128, 0.08);
+  background: rgba(255, 255, 255, 0.52);
+  border: 1px solid rgba(47, 80, 128, 0.08);
   font-size: 11px;
   font-weight: 800;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--blue);
+  color: rgba(9, 35, 62, 0.66);
 }
 
 .location__actions a {
@@ -1052,13 +1054,13 @@ textarea {
   min-height: 38px;
   padding: 0 14px;
   border-radius: 999px;
-  background: rgba(47, 80, 128, 0.08);
+  background: rgba(255, 255, 255, 0.52);
   border: 1px solid rgba(47, 80, 128, 0.08);
   font-size: 12px;
   font-weight: 800;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--blue);
+  color: rgba(9, 35, 62, 0.72);
 }
 
 .contact__notes {
@@ -1217,8 +1219,8 @@ textarea {
   }
 
   .topbar {
-    top: 8px;
-    width: min(calc(100vw - 20px), 240px);
+    top: 6px;
+    width: min(calc(100vw - 24px), 228px);
   }
 
   .topbar__inner {
@@ -1226,7 +1228,7 @@ textarea {
     align-items: center;
     justify-items: center;
     border-radius: 16px;
-    padding: 8px 10px;
+    padding: 7px 10px;
     gap: 0;
   }
 
@@ -1345,18 +1347,18 @@ textarea {
     position: relative;
     top: auto;
     align-items: start;
-    padding-top: 88px;
+    padding-top: 72px;
     padding-bottom: 0;
     min-height: auto;
   }
 
   .story__grid {
-    gap: 16px;
+    gap: 12px;
   }
 
   .story__frame {
     min-height: auto;
-    padding: 18px;
+    padding: 16px;
     border-radius: 28px;
   }
 
@@ -1369,7 +1371,7 @@ textarea {
   }
 
   .story__frame-ui {
-    margin: 12px 0;
+    margin: 10px 0 8px;
   }
 
   .story-overlay {
@@ -1387,7 +1389,7 @@ textarea {
   .story-pill {
     justify-content: center;
     padding: 0 10px;
-    min-height: 40px;
+    min-height: 38px;
   }
 
   #sequence-canvas {
@@ -1441,8 +1443,8 @@ textarea {
   }
 
   .story__cards {
-    gap: 10px;
-    min-height: 170px;
+    gap: 8px;
+    min-height: 152px;
     padding-bottom: 0;
   }
 
