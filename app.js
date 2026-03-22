@@ -26,6 +26,8 @@ let storyAnimationFrame = 0;
 let targetStoryProgress = 0;
 let currentStoryProgress = 0;
 let videoReady = false;
+let mobileVideoLoopFrame = 0;
+let mobileVideoObserver = null;
 
 function isMobileViewport() {
   return window.innerWidth < 820;
@@ -178,6 +180,16 @@ function syncVideoFrame(progress) {
   }
 }
 
+function getMobileVideoProgress() {
+  if (!sequenceVideo || !sequenceVideo.duration) {
+    return 0;
+  }
+
+  const startOffset = getStartFrame() / (frameCount - 1);
+  const currentRatio = sequenceVideo.currentTime / sequenceVideo.duration;
+  return clamp((currentRatio - startOffset) / Math.max(1 - startOffset, 0.0001), 0, 1);
+}
+
 function updateStoryCards(progress) {
   cards.forEach((card) => {
     const start = Number(card.dataset.start);
@@ -230,7 +242,9 @@ function drawStoryAtProgress(progress) {
   const frameIndex = Math.round(startFrame + progress * (frameCount - 1 - startFrame));
 
   if (isMobileViewport()) {
-    syncVideoFrame(progress);
+    updateStoryCards(progress);
+    updateStoryInterface(progress, frameIndex);
+    return;
   } else {
     drawFrame(frameIndex);
   }
@@ -255,6 +269,99 @@ function animateStory() {
   currentStoryProgress += delta * smoothing;
   drawStoryAtProgress(currentStoryProgress);
   storyAnimationFrame = window.requestAnimationFrame(animateStory);
+}
+
+function stopMobileVideoLoop() {
+  if (mobileVideoLoopFrame) {
+    window.cancelAnimationFrame(mobileVideoLoopFrame);
+    mobileVideoLoopFrame = 0;
+  }
+}
+
+function tickMobileVideoUi() {
+  mobileVideoLoopFrame = 0;
+
+  if (!isMobileViewport() || !sequenceVideo || sequenceVideo.paused || !videoReady) {
+    return;
+  }
+
+  const progress = getMobileVideoProgress();
+  const frameIndex = Math.round(getStartFrame() + progress * (frameCount - 1 - getStartFrame()));
+  updateStoryCards(progress);
+  updateStoryInterface(progress, frameIndex);
+  mobileVideoLoopFrame = window.requestAnimationFrame(tickMobileVideoUi);
+}
+
+function startMobileVideoLoop() {
+  if (!mobileVideoLoopFrame) {
+    mobileVideoLoopFrame = window.requestAnimationFrame(tickMobileVideoUi);
+  }
+}
+
+function initMobileVideoPlayback() {
+  if (!sequenceVideo) {
+    return;
+  }
+
+  if (mobileVideoObserver) {
+    mobileVideoObserver.disconnect();
+  }
+
+  const startFromVisibleFrame = () => {
+    if (!sequenceVideo.duration) {
+      return;
+    }
+
+    const startOffset = getStartFrame() / (frameCount - 1);
+    const startTime = startOffset * sequenceVideo.duration;
+
+    if (sequenceVideo.currentTime < startTime || sequenceVideo.currentTime >= sequenceVideo.duration - 0.04) {
+      sequenceVideo.currentTime = startTime;
+    }
+  };
+
+  const playVisibleSegment = () => {
+    if (!isMobileViewport() || !videoReady) {
+      return;
+    }
+
+    startFromVisibleFrame();
+    sequenceVideo.playbackRate = 0.82;
+    sequenceVideo.play().then(() => {
+      startMobileVideoLoop();
+    }).catch(() => {});
+  };
+
+  const stopVisibleSegment = () => {
+    sequenceVideo.pause();
+    stopMobileVideoLoop();
+  };
+
+  sequenceVideo.addEventListener("ended", () => {
+    if (!isMobileViewport()) {
+      return;
+    }
+
+    startFromVisibleFrame();
+    sequenceVideo.play().then(() => {
+      startMobileVideoLoop();
+    }).catch(() => {});
+  });
+
+  mobileVideoObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          playVisibleSegment();
+        } else {
+          stopVisibleSegment();
+        }
+      });
+    },
+    { threshold: 0.35 },
+  );
+
+  mobileVideoObserver.observe(storySection);
 }
 
 function syncStoryProgress(immediate = false) {
@@ -370,15 +477,21 @@ function initAmbientBackground() {
 
 function onScroll() {
   updateChrome();
-  syncStoryProgress();
+  if (!isMobileViewport()) {
+    syncStoryProgress();
+  }
 }
 
 function onResize() {
   if (!isMobileViewport()) {
     resizeCanvas();
+    syncStoryProgress(true);
+    return;
   }
 
-  syncStoryProgress(true);
+  if (videoReady) {
+    initMobileVideoPlayback();
+  }
 }
 
 window.addEventListener("scroll", onScroll, { passive: true });
@@ -388,13 +501,16 @@ updateChrome();
 initMetrics();
 initAmbientBackground();
 preloadFrames().then(() => {
+  if (isMobileViewport()) {
+    updateStoryCards(0);
+    updateStoryInterface(0, getStartFrame());
+    return;
+  }
+
   currentStoryProgress = getStoryProgress();
   targetStoryProgress = currentStoryProgress;
   syncStoryProgress(true);
-
-  if (!isMobileViewport()) {
-    requestDraw();
-  }
+  requestDraw();
 });
 
 if (sequenceVideo) {
@@ -405,15 +521,9 @@ if (sequenceVideo) {
   sequenceVideo.addEventListener("loadeddata", () => {
     videoReady = true;
     if (isMobileViewport()) {
-      sequenceVideo
-        .play()
-        .then(() => {
-          sequenceVideo.pause();
-          syncStoryProgress(true);
-        })
-        .catch(() => {
-          syncStoryProgress(true);
-        });
+      initMobileVideoPlayback();
+      updateStoryCards(0);
+      updateStoryInterface(0, getStartFrame());
       return;
     }
 
