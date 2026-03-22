@@ -17,6 +17,8 @@ const storyProgressValue = document.getElementById("story-progress-value");
 const metrics = Array.from(document.querySelectorAll(".metric__value"));
 const ambientCanvas = document.getElementById("ambient-canvas");
 const ambientContext = ambientCanvas.getContext("2d");
+const leadForm = document.getElementById("lead-form");
+const leadFormStatus = document.getElementById("lead-form-status");
 
 const imageCache = [];
 const mobileFrameStep = 2;
@@ -404,6 +406,80 @@ function initAmbientBackground() {
   window.addEventListener("resize", resizeAmbient, { passive: true });
 }
 
+function setLeadFormStatus(message, state = "") {
+  if (!leadFormStatus) {
+    return;
+  }
+
+  leadFormStatus.textContent = message;
+  leadFormStatus.classList.remove("is-error", "is-success");
+
+  if (state) {
+    leadFormStatus.classList.add(state);
+  }
+}
+
+function normalizePhone(value) {
+  return value.replace(/[^\d+]/g, "").trim();
+}
+
+function initLeadForm() {
+  if (!leadForm) {
+    return;
+  }
+
+  leadForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    const endpoint = leadForm.dataset.endpoint || "/api/lead";
+    const submitButton = leadForm.querySelector('button[type="submit"]');
+    const formData = new FormData(leadForm);
+    const payload = {
+      name: String(formData.get("name") || "").trim(),
+      phone: normalizePhone(String(formData.get("phone") || "")),
+      message: String(formData.get("message") || "").trim(),
+      page: window.location.href,
+      source: "glaz-almaz-launch",
+    };
+
+    if (!payload.name || !payload.phone) {
+      setLeadFormStatus("Заполни имя и телефон.", "is-error");
+      return;
+    }
+
+    if (window.location.hostname.endsWith("github.io")) {
+      setLeadFormStatus("Форма готова, отправка включится после переноса сайта на хостинг с backend.", "is-error");
+      return;
+    }
+
+    submitButton.disabled = true;
+    setLeadFormStatus("Отправляем заявку...");
+
+    try {
+      const response = await fetch(endpoint, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+
+      const result = await response.json().catch(() => ({}));
+
+      if (!response.ok || !result.ok) {
+        throw new Error(result.error || "send_failed");
+      }
+
+      leadForm.reset();
+      setLeadFormStatus("Заявка отправлена. Проверь Telegram.", "is-success");
+    } catch (error) {
+      setLeadFormStatus("Не удалось отправить заявку. Backend подключим на новом хостинге.", "is-error");
+    } finally {
+      submitButton.disabled = false;
+    }
+  });
+}
+
 function onScroll() {
   updateChrome();
   syncStoryProgress();
@@ -420,6 +496,7 @@ window.addEventListener("resize", onResize, { passive: true });
 updateChrome();
 initMetrics();
 initAmbientBackground();
+initLeadForm();
 preloadFrames().then(() => {
   currentStoryProgress = getStoryProgress();
   targetStoryProgress = currentStoryProgress;

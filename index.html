@@ -14,8 +14,8 @@
       href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="./tilda-fonts.css?v=20260322n" />
-    <link rel="stylesheet" href="./styles.css?v=20260322n" />
+    <link rel="stylesheet" href="./tilda-fonts.css?v=20260322o" />
+    <link rel="stylesheet" href="./styles.css?v=20260322o" />
   </head>
   <body>
     <div class="loader" id="loader">
@@ -440,6 +440,29 @@
                 <strong>4 адреса</strong>
               </div>
             </div>
+            <form class="lead-form" id="lead-form" data-endpoint="/api/lead">
+              <div class="lead-form__grid">
+                <label class="lead-form__field">
+                  <span>Имя</span>
+                  <input type="text" name="name" placeholder="Как к вам обращаться" maxlength="80" required />
+                </label>
+                <label class="lead-form__field">
+                  <span>Телефон</span>
+                  <input type="tel" name="phone" placeholder="+7 (___) ___-__-__" maxlength="32" required />
+                </label>
+              </div>
+              <label class="lead-form__field lead-form__field--full">
+                <span>Запрос</span>
+                <textarea
+                  name="message"
+                  rows="4"
+                  placeholder="Подбор оправ, проверка зрения, линзы, изготовление очков"
+                  maxlength="500"
+                ></textarea>
+              </label>
+              <button class="button button--primary lead-form__submit" type="submit">Отправить заявку</button>
+              <p class="lead-form__status" id="lead-form-status" aria-live="polite"></p>
+            </form>
           </div>
         </div>
       </section>
@@ -462,6 +485,6 @@
       </a>
     </div>
 
-    <script src="./app.js?v=20260322n"></script>
+    <script src="./app.js?v=20260322o"></script>
   </body>
 </html>

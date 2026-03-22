@@ -1121,6 +1121,83 @@ textarea {
   text-transform: uppercase;
 }
 
+.lead-form {
+  display: grid;
+  gap: 12px;
+  margin-top: 4px;
+}
+
+.lead-form__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.lead-form__field {
+  display: grid;
+  gap: 8px;
+}
+
+.lead-form__field span {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.66);
+}
+
+.lead-form__field input,
+.lead-form__field textarea {
+  width: 100%;
+  padding: 14px 16px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  outline: none;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.lead-form__field input::placeholder,
+.lead-form__field textarea::placeholder {
+  color: rgba(255, 255, 255, 0.48);
+}
+
+.lead-form__field input:focus,
+.lead-form__field textarea:focus {
+  border-color: rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.14);
+}
+
+.lead-form__field textarea {
+  min-height: 110px;
+  resize: vertical;
+}
+
+.lead-form__field--full {
+  grid-column: 1 / -1;
+}
+
+.lead-form__submit {
+  width: 100%;
+}
+
+.lead-form__status {
+  min-height: 18px;
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.45;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.lead-form__status.is-error {
+  color: #ffd7d7;
+}
+
+.lead-form__status.is-success {
+  color: #d7ffe2;
+}
+
 .footer {
   padding: 0 0 36px;
 }
@@ -1548,6 +1625,10 @@ textarea {
 
   .contact__booking {
     padding: 14px;
+  }
+
+  .lead-form__grid {
+    grid-template-columns: 1fr;
   }
 
   .contact__copy p,
