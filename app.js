@@ -160,7 +160,7 @@ function getStoryProgress() {
   const start = root.offsetTop;
   const end = start + root.offsetHeight - window.innerHeight;
   const rawProgress = clamp((window.scrollY - start) / Math.max(end - start, 1), 0, 1);
-  return clamp((rawProgress - 0.74) / 0.16, 0, 1);
+  return clamp((rawProgress - 0.84) / 0.1, 0, 1);
 }
 
 function syncVideoFrame(progress) {
