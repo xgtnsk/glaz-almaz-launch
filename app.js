@@ -149,10 +149,11 @@ function clamp(value, min, max) {
 function getStoryProgress() {
   if (isMobileViewport()) {
     const rect = storySection.getBoundingClientRect();
-    const startLine = window.innerHeight * 0.88;
-    const endLine = window.innerHeight * 0.18;
+    const startLine = window.innerHeight * 0.78;
+    const endLine = window.innerHeight * 0.26;
     const travel = rect.height + startLine - endLine;
-    return clamp((startLine - rect.top) / Math.max(travel, 1), 0, 1);
+    const rawProgress = clamp((startLine - rect.top) / Math.max(travel, 1), 0, 1);
+    return clamp((rawProgress - 0.04) / 0.72, 0, 1);
   }
 
   const root = storyScrollArea || storySection;
@@ -167,10 +168,11 @@ function syncVideoFrame(progress) {
   }
 
   const startOffset = getStartFrame() / (frameCount - 1);
-  const mappedProgress = startOffset + clamp(progress, 0, 1) * (1 - startOffset);
+  const mobileProgress = isMobileViewport() ? clamp(progress, 0, 1) * 0.96 : clamp(progress, 0, 1);
+  const mappedProgress = startOffset + mobileProgress * (1 - startOffset);
   const targetTime = mappedProgress * sequenceVideo.duration;
 
-  if (Math.abs(sequenceVideo.currentTime - targetTime) > 0.04) {
+  if (Math.abs(sequenceVideo.currentTime - targetTime) > 0.02) {
     sequenceVideo.currentTime = targetTime;
   }
 }
@@ -241,7 +243,7 @@ function animateStory() {
 
   const delta = targetStoryProgress - currentStoryProgress;
   const mobile = isMobileViewport();
-  const smoothing = mobile ? 0.14 : 0.2;
+  const smoothing = mobile ? 0.22 : 0.2;
 
   if (Math.abs(delta) < 0.0015) {
     currentStoryProgress = targetStoryProgress;

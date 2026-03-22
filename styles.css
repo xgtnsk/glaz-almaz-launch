@@ -1238,12 +1238,12 @@ textarea {
 
   .hero__actions {
     gap: 8px;
-    margin-top: 20px;
+    margin-top: 16px;
   }
 
   .hero__list {
     gap: 8px;
-    margin-top: 16px;
+    margin-top: 12px;
   }
 
   .hero__list li {
@@ -1253,18 +1253,18 @@ textarea {
 
   .hero__visual {
     gap: 10px;
-    margin-top: 2px;
+    margin-top: -10px;
   }
 
   .hero-visual {
-    padding: 12px;
+    padding: 10px;
     border-radius: 24px;
   }
 
   .hero-visual__image {
     padding: 8px;
     border-radius: 18px;
-    aspect-ratio: 1.55;
+    aspect-ratio: 1.36;
   }
 
   .hero-visual__image img {
@@ -1273,28 +1273,28 @@ textarea {
 
   .hero__facts {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 10px;
-    margin-top: 10px;
+    gap: 8px;
+    margin-top: 6px;
   }
 
   .hero-fact {
     min-height: auto;
-    padding: 12px;
-    border-radius: 20px;
+    padding: 10px;
+    border-radius: 18px;
   }
 
   .hero-fact__value {
-    margin-bottom: 6px;
-    font-size: 15px;
+    margin-bottom: 4px;
+    font-size: 14px;
   }
 
   .hero-fact__text {
-    font-size: 12px;
-    line-height: 1.32;
+    font-size: 11px;
+    line-height: 1.26;
   }
 
   .story {
-    margin-top: 0;
+    margin-top: -42px;
   }
 
   .story__scroll-area {
@@ -1305,7 +1305,7 @@ textarea {
     position: relative;
     top: auto;
     align-items: start;
-    padding-top: 14px;
+    padding-top: 2px;
     padding-bottom: 0;
     min-height: auto;
   }
