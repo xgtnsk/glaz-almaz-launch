@@ -59,6 +59,7 @@ function preloadFrames() {
     if (sequenceVideo) {
       sequenceVideo.currentTime = 0;
       sequenceVideo.pause();
+      sequenceVideo.load();
     }
     return Promise.resolve();
   }
@@ -163,7 +164,9 @@ function syncVideoFrame(progress) {
     return;
   }
 
-  const targetTime = clamp(progress, 0, 1) * sequenceVideo.duration;
+  const startOffset = getStartFrame() / (frameCount - 1);
+  const mappedProgress = startOffset + clamp(progress, 0, 1) * (1 - startOffset);
+  const targetTime = mappedProgress * sequenceVideo.duration;
 
   if (Math.abs(sequenceVideo.currentTime - targetTime) > 0.04) {
     sequenceVideo.currentTime = targetTime;
@@ -394,8 +397,21 @@ if (sequenceVideo) {
   sequenceVideo.muted = true;
   sequenceVideo.playsInline = true;
 
-  sequenceVideo.addEventListener("loadedmetadata", () => {
+  sequenceVideo.addEventListener("loadeddata", () => {
     videoReady = true;
+    if (isMobileViewport()) {
+      sequenceVideo
+        .play()
+        .then(() => {
+          sequenceVideo.pause();
+          syncStoryProgress(true);
+        })
+        .catch(() => {
+          syncStoryProgress(true);
+        });
+      return;
+    }
+
     syncStoryProgress(true);
   });
 }

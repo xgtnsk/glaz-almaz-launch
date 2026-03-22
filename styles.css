@@ -1218,7 +1218,7 @@ textarea {
   .hero {
     min-height: auto;
     padding-top: 96px;
-    padding-bottom: 18px;
+    padding-bottom: 8px;
   }
 
   .hero__title {
@@ -1253,7 +1253,7 @@ textarea {
 
   .hero__visual {
     gap: 10px;
-    margin-top: 8px;
+    margin-top: 4px;
   }
 
   .hero-visual {
@@ -1274,7 +1274,7 @@ textarea {
   .hero__facts {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 10px;
-    margin-top: 18px;
+    margin-top: 12px;
   }
 
   .hero-fact {
@@ -1301,18 +1301,18 @@ textarea {
     position: relative;
     top: auto;
     align-items: start;
-    padding-top: 52px;
+    padding-top: 28px;
     padding-bottom: 0;
     min-height: auto;
   }
 
   .story__grid {
-    gap: 12px;
+    gap: 8px;
   }
 
   .story__frame {
     min-height: auto;
-    padding: 16px;
+    padding: 14px;
     border-radius: 28px;
   }
 
