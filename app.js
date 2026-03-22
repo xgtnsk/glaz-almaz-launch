@@ -147,6 +147,14 @@ function clamp(value, min, max) {
 }
 
 function getStoryProgress() {
+  if (isMobileViewport()) {
+    const rect = storySection.getBoundingClientRect();
+    const startLine = window.innerHeight * 0.88;
+    const endLine = window.innerHeight * 0.18;
+    const travel = rect.height + startLine - endLine;
+    return clamp((startLine - rect.top) / Math.max(travel, 1), 0, 1);
+  }
+
   const root = storyScrollArea || storySection;
   const start = root.offsetTop;
   const end = start + root.offsetHeight - window.innerHeight;

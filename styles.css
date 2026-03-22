@@ -1294,30 +1294,29 @@ textarea {
   }
 
   .story {
-    margin-top: -18px;
+    margin-top: 0;
   }
 
   .story__scroll-area {
-    height: 132vh;
+    height: auto;
   }
 
   .story__sticky {
-    position: sticky;
-    top: 64px;
+    position: relative;
+    top: auto;
     align-items: start;
-    padding-top: 8px;
+    padding-top: 14px;
     padding-bottom: 0;
-    min-height: calc(100vh - 64px);
+    min-height: auto;
   }
 
   .story__grid {
-    gap: 10px;
-    align-content: start;
+    gap: 8px;
   }
 
   .story__frame {
     min-height: auto;
-    padding: 14px;
+    padding: 12px;
     border-radius: 28px;
   }
 
@@ -1397,7 +1396,7 @@ textarea {
     gap: 8px;
     min-height: 152px;
     padding-bottom: 0;
-    margin-top: 2px;
+    margin-top: 0;
   }
 
   .section-head {
