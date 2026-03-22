@@ -1253,7 +1253,7 @@ textarea {
 
   .hero__visual {
     gap: 10px;
-    margin-top: -10px;
+    margin-top: -18px;
   }
 
   .hero-visual {
@@ -1274,7 +1274,7 @@ textarea {
   .hero__facts {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 8px;
-    margin-top: 6px;
+    margin-top: 2px;
   }
 
   .hero-fact {
@@ -1294,7 +1294,7 @@ textarea {
   }
 
   .story {
-    margin-top: -42px;
+    margin-top: -68px;
   }
 
   .story__scroll-area {
@@ -1305,7 +1305,7 @@ textarea {
     position: relative;
     top: auto;
     align-items: start;
-    padding-top: 2px;
+    padding-top: 0;
     padding-bottom: 0;
     min-height: auto;
   }

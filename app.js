@@ -149,17 +149,18 @@ function clamp(value, min, max) {
 function getStoryProgress() {
   if (isMobileViewport()) {
     const rect = storySection.getBoundingClientRect();
-    const startLine = window.innerHeight * 0.78;
-    const endLine = window.innerHeight * 0.26;
+    const startLine = window.innerHeight * 0.9;
+    const endLine = window.innerHeight * 0.3;
     const travel = rect.height + startLine - endLine;
     const rawProgress = clamp((startLine - rect.top) / Math.max(travel, 1), 0, 1);
-    return clamp((rawProgress - 0.04) / 0.72, 0, 1);
+    return clamp((rawProgress + 0.02) / 0.62, 0, 1);
   }
 
   const root = storyScrollArea || storySection;
   const start = root.offsetTop;
   const end = start + root.offsetHeight - window.innerHeight;
-  return clamp((window.scrollY - start) / Math.max(end - start, 1), 0, 1);
+  const rawProgress = clamp((window.scrollY - start) / Math.max(end - start, 1), 0, 1);
+  return clamp((rawProgress - 0.18) / 0.68, 0, 1);
 }
 
 function syncVideoFrame(progress) {
