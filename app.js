@@ -153,7 +153,7 @@ function getStoryProgress() {
     const endLine = window.innerHeight * 0.3;
     const travel = rect.height + startLine - endLine;
     const rawProgress = clamp((startLine - rect.top) / Math.max(travel, 1), 0, 1);
-    return clamp((rawProgress + 0.02) / 0.62, 0, 1);
+    return clamp((rawProgress + 0.01) / 0.86, 0, 1);
   }
 
   const root = storyScrollArea || storySection;
@@ -173,7 +173,7 @@ function syncVideoFrame(progress) {
   const mappedProgress = startOffset + mobileProgress * (1 - startOffset);
   const targetTime = mappedProgress * sequenceVideo.duration;
 
-  if (Math.abs(sequenceVideo.currentTime - targetTime) > 0.02) {
+  if (Math.abs(sequenceVideo.currentTime - targetTime) > 0.012) {
     sequenceVideo.currentTime = targetTime;
   }
 }
@@ -244,7 +244,7 @@ function animateStory() {
 
   const delta = targetStoryProgress - currentStoryProgress;
   const mobile = isMobileViewport();
-  const smoothing = mobile ? 0.22 : 0.2;
+  const smoothing = mobile ? 0.1 : 0.2;
 
   if (Math.abs(delta) < 0.0015) {
     currentStoryProgress = targetStoryProgress;
