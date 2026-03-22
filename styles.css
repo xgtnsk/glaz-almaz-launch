@@ -278,8 +278,8 @@ textarea {
 
 .hero {
   position: relative;
-  min-height: 100vh;
-  padding: 140px 0 70px;
+  min-height: 84vh;
+  padding: 140px 0 36px;
 }
 
 .hero__grid {
@@ -371,8 +371,9 @@ textarea {
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  background: linear-gradient(135deg, var(--blue), var(--blue-soft));
-  box-shadow: 0 0 20px rgba(79, 128, 168, 0.4);
+  background: rgba(47, 80, 128, 0.18);
+  border: 1px solid rgba(47, 80, 128, 0.34);
+  box-shadow: none;
 }
 
 .hero__visual {
@@ -1250,8 +1251,8 @@ textarea {
 
   .hero {
     min-height: auto;
-    padding-top: 104px;
-    padding-bottom: 28px;
+    padding-top: 96px;
+    padding-bottom: 18px;
   }
 
   .hero__title {
@@ -1264,8 +1265,9 @@ textarea {
 
   .hero__lead {
     max-width: none;
-    font-size: 14px;
-    line-height: 1.55;
+    margin-top: 16px;
+    font-size: 13px;
+    line-height: 1.48;
   }
 
   .hero__visual {
@@ -1273,17 +1275,18 @@ textarea {
   }
 
   .hero__actions {
-    gap: 10px;
+    gap: 8px;
+    margin-top: 20px;
   }
 
   .hero__list {
-    gap: 10px;
-    margin-top: 18px;
+    gap: 8px;
+    margin-top: 16px;
   }
 
   .hero__list li {
-    font-size: 13px;
-    line-height: 1.4;
+    font-size: 12px;
+    line-height: 1.32;
   }
 
   .hero-card--main,
@@ -1297,16 +1300,17 @@ textarea {
   .hero__visual {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 12px;
+    gap: 10px;
+    margin-top: 8px;
   }
 
   .hero-card--main {
     grid-column: 1 / -1;
-    padding: 14px;
+    padding: 12px;
   }
 
   .hero-card--floating {
-    padding: 14px;
+    padding: 12px;
   }
 
   .hero-card__top {
@@ -1319,7 +1323,18 @@ textarea {
 
   .hero-card__image {
     margin: 0;
-    border-radius: 22px;
+    border-radius: 18px;
+    aspect-ratio: 1.55;
+  }
+
+  .hero-card__eyebrow {
+    margin-bottom: 6px;
+    font-size: 15px;
+  }
+
+  .hero-card__text {
+    font-size: 12px;
+    line-height: 1.32;
   }
 
   .story__scroll-area {
@@ -1449,7 +1464,7 @@ textarea {
   .locations,
   .contact,
   .story {
-    scroll-margin-top: 142px;
+    scroll-margin-top: 88px;
   }
 
   .locations .section-head h2 {
@@ -1458,25 +1473,6 @@ textarea {
   }
 
   .metrics {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 12px;
-  }
-
-  .metric {
-    padding: 18px;
-  }
-
-  .metric__value {
-    font-size: clamp(34px, 11vw, 52px);
-  }
-
-  .metric__label {
-    margin-top: 8px;
-    font-size: 13px;
-    line-height: 1.35;
-  }
-
-  .metric:last-child {
     display: none;
   }
 
@@ -1582,15 +1578,15 @@ textarea {
   .offers,
   .locations,
   .contact {
-    padding-bottom: 48px;
+    padding-bottom: 32px;
   }
 
   .locations {
-    padding-top: 44px;
+    padding-top: 24px;
   }
 
   .contact__panel {
-    padding: 20px;
+    padding: 16px;
   }
 
   .contact__notes {
@@ -1598,7 +1594,14 @@ textarea {
   }
 
   .contact__booking {
-    padding: 16px;
+    padding: 14px;
+  }
+
+  .contact__copy p,
+  .contact-booking__head h3,
+  .contact-note strong {
+    overflow-wrap: anywhere;
+    word-break: break-word;
   }
 
   .contact-rail__item {
